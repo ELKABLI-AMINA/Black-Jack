@@ -53,6 +53,15 @@ public class Main {
       ///////////////////////////::::
       int[][] cartesM=BlackJack.melanger(jeuDeCartes);
         System.out.println("amina");
+        ////////////////////////////
+        int n=8;
+       int [][][] amina = BlackJack.piocherCartes(jeuDeCartes,n);
+        System.out.println("hello");
+        ///////////////
+        int[][] cartePiochees = new int[0][];
+        int[][] cartes_a_defausser = new int[0][];
+        int [][] faiza = BlackJack.defausserCartes(cartePiochees, cartes_a_defausser);
+        System.out.println("joudia");
 
     }
 
