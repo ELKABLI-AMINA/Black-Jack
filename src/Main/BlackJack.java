@@ -7,18 +7,17 @@ import java.util.Set;
 
 public class BlackJack {
 
-    public static List<int[]> createCard(int[] carte) {
-        List<int[]> cartes = new ArrayList<>();
-        Set<Integer> couleurs = new HashSet<>();
-        couleurs.add(1); // Carreau
-        couleurs.add(2); // Cœur
-        couleurs.add(3); // Pique
-        couleurs.add(4); // Trèfle
+    public static int[][] createCard(int[] carte) {
+        int[][] cartes = new int[52][2]; // Tableau pour stocker les cartes
+        int[] couleurs = {1, 2, 3, 4}; // Tableau pour stocker les couleurs
+
         int prochaineHauteur = carte[0];
         int prochaineCouleur = carte[1];
+        int index = 0;
 
-        while (cartes.size() < 52) {
-            cartes.add(new int[]{prochaineHauteur, prochaineCouleur});
+        while (index < 52) {
+            cartes[index][0] = prochaineHauteur;
+            cartes[index][1] = prochaineCouleur;
 
             prochaineHauteur++;
             if (prochaineHauteur > 13) {
@@ -29,7 +28,11 @@ public class BlackJack {
             if (prochaineCouleur > 4) {
                 prochaineCouleur = 1;
             }
+
+            index++;
         }
+
         return cartes;
     }
+
 }
