@@ -133,6 +133,9 @@ public class BlackJack {
         do {
             System.out.println("Faites votre mise : ");
             mise = scanner.nextInt();
+            if (mise <= 0 || mise > argentJoueur) {
+                System.out.println("Mise invalide. Veuillez miser un montant entre 1 et " + argentJoueur);
+            }
         } while (mise <= 0 || mise > argentJoueur);
 
         argentJoueur -= mise;
@@ -140,30 +143,7 @@ public class BlackJack {
         return mise;
     }
 
-    public static int[][][] distribuerCartes(int[][] cartes) {
-        int[][] mainJoueur = new int[2][];
-        int[][] mainCroupier = new int[2][];
-        int[][][] resultat = piocherCartes(cartes, 1);
-        mainJoueur[0] = resultat[0][0];
-        cartes = resultat[1];
 
-        resultat = piocherCartes(cartes, 1);
-        mainCroupier[0] = resultat[0][0];
-        cartes = resultat[1];
-
-
-        resultat = piocherCartes(cartes, 1);
-        mainJoueur[1] = resultat[0][0];
-        cartes = resultat[1];
-
-        // Distribuer une carte face visible pour le croupier
-        resultat = piocherCartes(cartes, 1);
-        mainCroupier[1] = resultat[0][0];
-        cartes = resultat[1];
-
-        int[][][] mains = new int[][][]{mainJoueur, mainCroupier};
-        return mains;
-    }
 
 
 
