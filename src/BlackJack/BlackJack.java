@@ -143,6 +143,56 @@ public class BlackJack {
         return mise;
     }
 
+    public static void distribuerCartesInitiales(int[][] cartes, String joueur, String croupier) {
+        int[][] carteJoueur = new int[2][];
+        int[][] carteCroupier = new int[2][];
+        int scoreJoueur = 0;
+        int scoreCroupier = 0;
+
+        for (int i = 0; i < 2; i++) {
+            int[][][] carteTireeJoueur = tirerCarte(cartes);
+            int[][][] carteTireeCroupier = tirerCarte(cartes);
+
+            int valeurCarteJoueur = carteTireeJoueur[0][0][0];
+            int valeurCarteCroupier = carteTireeCroupier[0][0][0];
+
+            scoreJoueur += valeurCarteJoueur;
+            scoreCroupier += valeurCarteCroupier;
+
+            carteJoueur[i] = carteTireeJoueur[0][0];
+            carteCroupier[i] = carteTireeCroupier[0][0];
+        }
+
+        System.out.println(joueur + "  : [" + carteJoueur[0][0] + ", " + carteJoueur[0][1] + "] et [" + carteJoueur[1][0] + ", " + carteJoueur[1][1] + "]");
+        System.out.println(croupier + "  : [" + carteCroupier[0][0] + ", " + carteCroupier[0][1] + "] et [" + carteCroupier[1][0] + ", " + carteCroupier[1][1] + "]");
+
+        System.out.println("Score du " + joueur + " : " + scoreJoueur);
+        System.out.println("Score du " + croupier + " : " + scoreCroupier);
+
+        if (scoreJoueur == 21) {
+            System.out.println(joueur + " a un blackjack !");
+
+        } else {
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
