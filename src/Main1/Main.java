@@ -8,7 +8,8 @@ import static BlackJack.BlackJack.*;
 
 public class Main {
     public static void main(String[] args) {
-        int[][] cartes = createCardDeck();
+        int[] asDeCarreau = {1, 1};
+        int[][] jeuDeCartes = createCardDeck(asDeCarreau);
         int[] argentJoueur = {1000};
         int[] argentCroupier = {1000};
 
@@ -16,7 +17,7 @@ public class Main {
             System.out.println("Solde du joueur : " + argentJoueur[0]);
             int mise = miser(argentJoueur[0]);
 
-            distribuerCartesInitiales(cartes, "Joueur", "Croupier", argentJoueur, argentCroupier);
+            distribuerCartesInitiales(jeuDeCartes, "Joueur", "Croupier", argentJoueur, argentCroupier);
 
             System.out.println("Voulez-vous continuer à jouer ? (1 pour Oui, 2 pour Non)");
             Scanner scanner = new Scanner(System.in);
