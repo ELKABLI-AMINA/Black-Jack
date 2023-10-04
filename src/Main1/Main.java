@@ -9,18 +9,23 @@ import static BlackJack.BlackJack.*;
 public class Main {
     public static void main(String[] args) {
         int[] asDeCarreau = {1, 1};
-        int[][] jeuDeCartes = createCardDeck(asDeCarreau);
-        int[] argentJoueur = {1000};
-        int[] argentCroupier = {1000};
+        int[][] jeucartes = createCardDeck(asDeCarreau);
+        System.out.println("Entrez votre solde initial : ");
+        Scanner scanner= new Scanner(System.in);
+        argentJoueur =  scanner.nextInt();
 
-        while (argentJoueur[0] > 0) {
-            System.out.println("Solde du joueur : " + argentJoueur[0]);
-            int mise = miser(argentJoueur[0]);
 
-            distribuerCartesInitiales(jeuDeCartes, "Joueur", "Croupier", argentJoueur, argentCroupier);
 
+
+        while (argentJoueur > 0) {
+
+            miser(argentJoueur);
+            distribuerCartesInitiales(jeucartes, "Joueur", "Croupier", argentJoueur);
+            if (argentJoueur <= 0) {
+                break;
+            }
             System.out.println("Voulez-vous continuer à jouer ? (1 pour Oui, 2 pour Non)");
-            Scanner scanner = new Scanner(System.in);
+            scanner = new Scanner(System.in);
             int choix = scanner.nextInt();
             if (choix == 2) {
                 break;

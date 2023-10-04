@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class BlackJack {
+    public static int mise = 0;
+    public static int argentJoueur=0;
     public static int[][] createCardDeck(int[] asDeCarreau) {
         int[][] cartes = new int[52][2];
 
@@ -28,30 +30,26 @@ public class BlackJack {
         return cartes;
     }
     public static int[][][] extraireIemeCarte(int[][] cartes, int indice) {
-        if (indice >= 0 && indice < cartes.length) {
-            int[] carteExtraite = cartes[indice];
-            int[][] cartesRestantes = new int[cartes.length - 1][2];
+        int[][] carteExtraite = new int[1][2];
+        int[][] cartesRestantes = new int[cartes.length - 1][2];
 
-            int j = 0;
-            for (int i = 0; i < cartes.length; i++) {
-                if (i != indice) {
-                    cartesRestantes[j++] = cartes[i];
-                }
+        int j = 0;
+        for (int i = 0; i < cartes.length; i++) {
+            if (i != indice) {
+                cartesRestantes[j++] = cartes[i];
+            } else {
+                carteExtraite[0][0] = cartes[i][0];
+                carteExtraite[0][1] = cartes[i][1]; 
             }
-            int[][][] resultat = new int[2][][];
-
-            resultat[0] = new int[1][];
-            resultat[1] = cartesRestantes;
-
-            resultat[0][0] = carteExtraite;
-
-
-            return resultat;
-        } else {
-            System.out.println("L'indice n'existe pas");
-            return null;
         }
+
+        int[][][] resultat = new int[2][][];
+        resultat[0] = carteExtraite;
+        resultat[1] = cartesRestantes;
+
+        return resultat;
     }
+
     public static int[][][] tirerCarte(int[][] cartes) {
         if (cartes.length > 0) {
             Random random = new Random();
@@ -72,9 +70,12 @@ public class BlackJack {
             cartesRestantes = resultatExtractionT[1];
         }
 
+
         return carteTiree;
     }
     public static int[][][] piocherCartes(int[][] cartes, int n) {
+        Random random = new Random();
+         n = random.nextInt(11) + 20; // Génère un nombre aléatoire entre 20 et 30 inclus
 
         int[][] cartePiochees = new int[n][];
         int[][] cartesRestantes = new int[cartes.length - n][];
@@ -111,9 +112,10 @@ public class BlackJack {
     }
     public static int miser(int argentJoueur) {
 
-        int mise = 0;
+
 
         Scanner scanner = new Scanner(System.in);
+
         do {
             System.out.println("Faites votre mise : ");
             mise = scanner.nextInt();
@@ -126,9 +128,9 @@ public class BlackJack {
 
         return mise;
     }
-    public static void distribuerCartesInitiales(int[][] cartes, String joueur, String croupier, int[] argentJoueur, int[] argentCroupier) {
+    public static void distribuerCartesInitiales(int[][] cartes, String joueur, String croupier, int argentJoueur) {
         int[][] carteJoueur = new int[2][];
-        int[][] carteCroupier = new int[1][];
+        int[][] carteCroupier = new int[2][];
         int scoreJoueur = 0;
         int scoreCroupier = 0;
         cartes = melanger(cartes);
@@ -152,60 +154,50 @@ public class BlackJack {
             carteJoueur[i] = carteTireeJoueur[0][0];
         }
 
-        // Donnez une carte au croupier
         int[][][] carteTireeCroupier = tirerCarte(cartes);
-        int valeurCarteCroupier = carteTireeCroupier[0][0][0];
+        int valeurCarteCroupier1 = carteTireeCroupier[0][0][0];
 
-        if (valeurCarteCroupier >= 10) {
-            valeurCarteCroupier = 10;
+        if (valeurCarteCroupier1 >= 10) {
+            valeurCarteCroupier1 = 10;
         }
-        if (valeurCarteCroupier == 1) {
+        if (valeurCarteCroupier1 == 1) {
             if (scoreCroupier + 11 <= 10) {
-                valeurCarteCroupier = 11;
+                valeurCarteCroupier1 = 11;
             } else {
-                valeurCarteCroupier = 1;
+                valeurCarteCroupier1 = 1;
             }
         }
-        scoreCroupier += valeurCarteCroupier;
+        scoreCroupier += valeurCarteCroupier1;
         carteCroupier[0] = carteTireeCroupier[0][0];
 
-        System.out.println(croupier + "  : [" + carteCroupier[0][0] + ", " + carteCroupier[0][1] + "]");
-        System.out.println(joueur + "  : [" + carteJoueur[0][0] + ", " + carteJoueur[0][1] + "] et [" + carteJoueur[1][0] + ", " + carteJoueur[1][1] + "]");
 
-        phaseJoueur(cartes, scoreJoueur, argentJoueur);
-        phaseCroupier(cartes, scoreCroupier);
-        determinerResultat(argentJoueur, argentCroupier, scoreJoueur, scoreCroupier);
-    }
+        int[][][] carteTireeCroupier2 = tirerCarte(cartes);
+        int valeurCarteCroupier2 = carteTireeCroupier2[0][0][0];
 
-    public static void phaseCroupier(int[][] cartes, int scoreInitialCroupier) {
-        int scoreCroupier = scoreInitialCroupier;
-
-        while (true) {
-            System.out.println("Score du Croupier : " + scoreCroupier);
-
-            if (scoreCroupier >= 17) {
-                System.out.println("Le croupier s'arrête.");
-                break;
-            }
-
-            System.out.println("Croupier, voulez-vous demander une autre carte ? (1 pour Oui, 2 pour Non)");
-            Scanner scanner = new Scanner(System.in);
-            String choix = scanner.nextLine().trim().toLowerCase();
-            if (choix.equals("oui")) {
-                int[][][] carteTireeCroupier = tirerCarte(cartes);
-                int valeurCarteCroupier = carteTireeCroupier[0][0][0];
-
-
-                scoreCroupier += valeurCarteCroupier;
-                System.out.println("Croupier a tiré une carte de valeur " + valeurCarteCroupier);
-                System.out.println("Nouveau score du Croupier : " + scoreCroupier);
-            } else if (choix.equals("non")) {
-                System.out.println("Le croupier s'arrête.");
-                break;
+        if (valeurCarteCroupier2 >= 10) {
+            valeurCarteCroupier2 = 10;
+        }
+        if (valeurCarteCroupier2 == 1) {
+            if (scoreCroupier + 11 <= 10) {
+                valeurCarteCroupier2 = 11;
+            } else {
+                valeurCarteCroupier2 = 1;
             }
         }
+        scoreCroupier += valeurCarteCroupier2;
+        carteCroupier[1] = carteTireeCroupier2[0][0];
+
+        System.out.println(croupier + "  : [" + carteCroupier[0][0] + ", " + carteCroupier[0][1] + "] et  [?, ?]");
+        System.out.println(joueur + "  : [" + carteJoueur[0][0] + ", " + carteJoueur[0][1] + "] et [" + carteJoueur[1][0] + ", " + carteJoueur[1][1] + "]");
+
+        scoreJoueur = phaseJoueur(cartes, scoreJoueur, argentJoueur);
+        if(scoreJoueur<=21){
+            phaseCroupier(cartes, scoreCroupier, scoreJoueur);
+        }
+        determinerResultat(argentJoueur, scoreJoueur, scoreCroupier,mise);
     }
-    public static void phaseJoueur(int[][] cartes, int scoreInitialJoueur, int[] argentJoueur) {
+
+    public static int phaseJoueur(int[][] cartes, int scoreInitialJoueur, int argentJoueur) {
         int scoreAfficheJoueur = scoreInitialJoueur;
         int scoreJoueur = scoreInitialJoueur;
         boolean asUtilise = false;
@@ -220,8 +212,14 @@ public class BlackJack {
             if (choix.equals("oui")) {
                 int[][][] carteTireeJoueur = tirerCarte(cartes);
                 int valeurCarteJoueur = carteTireeJoueur[0][0][0];
-
-
+                if (valeurCarteJoueur > 10) {
+                    valeurCarteJoueur = 10;
+                }
+                if (valeurCarteJoueur == 1) {
+                    if (scoreJoueur + 11 <= 21) {
+                        valeurCarteJoueur = 11;
+                    }
+                }
                 scoreJoueur += valeurCarteJoueur;
 
                 if (scoreJoueur > 21 && asUtilise) {
@@ -230,6 +228,8 @@ public class BlackJack {
                 }
 
                 System.out.println("Joueur a tiré une carte de valeur " + valeurCarteJoueur);
+
+
             } else if (choix.equals("non")) {
                 break;
             } else {
@@ -238,33 +238,62 @@ public class BlackJack {
 
             scoreAfficheJoueur = scoreJoueur;
         }
-
-        System.out.println("Score du Joueur : " + scoreAfficheJoueur);
-        System.out.println("Solde du joueur : " + argentJoueur[0]);
+        return scoreJoueur;
     }
-    public static void determinerResultat(int[] argentJoueur, int[] argentCroupier, int scoreJoueur, int scoreCroupier) {
+    public static void phaseCroupier(int[][] cartes, int scoreInitialCroupier, int scoreJoueur) {
+        int scoreCroupier = scoreInitialCroupier;
+
+
+        while (scoreCroupier<17 || scoreCroupier>21 ) {
+            System.out.println("Score du Croupier : " + scoreCroupier);
+            if (scoreCroupier >= 17 ) {
+                System.out.println("Le croupier s'arrête.");
+                break;
+            }
+
+            int[][][] carteTireeCroupier = tirerCarte(cartes);
+            int valeurCarteCroupier = carteTireeCroupier[0][0][0];
+            if (valeurCarteCroupier > 10) {
+                valeurCarteCroupier = 10;
+            }
+            if (valeurCarteCroupier == 1) {
+                if (scoreCroupier + 11 <= 21) {
+                    valeurCarteCroupier = 11;
+                }
+            }
+
+            scoreCroupier += valeurCarteCroupier;
+            System.out.println("Croupier a tiré une carte de valeur " + valeurCarteCroupier);
+
+        }
+    }
+
+
+    public static void determinerResultat(int argentJoueur, int scoreJoueur, int scoreCroupier, int mise) {
         if (scoreJoueur > 21) {
             System.out.println("Joueur dépasse 21. Croupier gagne !");
+            System.out.println(" le solde du Joueur est : " + (argentJoueur-mise));
+
         } else if (scoreCroupier > 21) {
             System.out.println("Croupier dépasse 21. Joueur gagne !");
-            argentJoueur[0] += 2 * argentJoueur[0];
+
         } else if (scoreJoueur == scoreCroupier) {
             System.out.println("Égalité. Argent retourné au joueur.");
-            argentJoueur[0] += argentJoueur[0];
+
         } else if (scoreJoueur == 21) {
             System.out.println("Joueur a un blackjack !");
-            argentJoueur[0] += (int)(2.5 * argentJoueur[0]);
+            System.out.println(" le solde du Joueur est : " + (argentJoueur+mise));
         } else if (scoreCroupier == 21) {
             System.out.println("Croupier a un blackjack. Croupier gagne !");
         } else if (scoreJoueur > scoreCroupier) {
             System.out.println("Joueur gagne !");
-            argentJoueur[0] += 2 * argentJoueur[0];
+            System.out.println(" le solde du Joueur est : " + (argentJoueur+mise));
         } else {
             System.out.println("Croupier gagne !");
         }
 
 
-        System.out.println("Solde du croupier : " + argentCroupier[0]);
+
     }
 
 
