@@ -14,13 +14,10 @@ public class Main {
         Scanner scanner= new Scanner(System.in);
         argentJoueur =  scanner.nextInt();
 
-
-
-
         while (argentJoueur > 0) {
 
             miser(argentJoueur);
-            distribuerCartesInitiales(jeucartes, "Joueur", "Croupier", argentJoueur);
+            distribuerCartes(jeucartes, "Joueur", "Croupier", argentJoueur);
             if (argentJoueur <= 0) {
                 break;
             }
